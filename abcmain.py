@@ -1,19 +1,13 @@
 from flask import Flask
 from flask import Response
 from flask import redirect
-from flask import render_template
-from flask import render_template_string
 from flask import request
 from flask import session
 from flask import stream_with_context
 from flask import url_for
+from models import User
 from flask_dotenv import DotEnv
 from flask.ext.sqlalchemy import SQLAlchemy
-from smartcard.System import readers
-from smartcard.Exceptions import NoCardException
-from smartcard.System import readers
-from smartcard.util import toHexString
-from binascii import unhexlify, b2a_base64
 import time
 
 app = Flask(__name__)
@@ -37,7 +31,7 @@ class User(db.Model):
 		self.identification_number = identification_number
 		self.status_cekal = status_cekal
 
-	def __repr__(self):
+	def __repr__(self):i
 		return '< %r>' % self.identification_number
 
 
@@ -47,38 +41,17 @@ def logging():
 	import time
 	"""
 		This method will respectively log the data into database
-	"""
-
-
-		
+	"""		
 	# render_template('index.html', title='', current_page='ABC Gate Home')
 
 
 @app.route('/get_cekal/<identification_number>', methods=['GET'])
 def get_cekal(identification_number):
+	import User
     """
     	This routing will handle every get request
     """
-
-
-@app.route("/")
-def open_gate():
-	import RPi.GPIO as GPIO
-	"""
-		This method will switch the gate, so that the traveller can pass the gate
-	"""
-	# setting a current mode
-	GPIO.setmode(GPIO.BCM)
-	#removing the warings 
-	GPIO.setwarnings(False)
-	#creating a list (array) with the number of GPIO's that we use 
-	pin = 18 
-	#setting the mode for all pins so all will be switched on 
-	GPIO.setup(pin, GPIO.OUT)
-	GPIO.output(pin,  GPIO.HIGH)
-	#cleaning all GPIO's 
-	GPIO.cleanup()
-	return redirect_url(url_for('logging'))
+    if 
 
 
 @app.errorhandler(404)
