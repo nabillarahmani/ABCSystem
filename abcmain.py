@@ -7,8 +7,7 @@ from flask import stream_with_context
 from flask import url_for
 from flask_dotenv import DotEnv
 from flask_sqlalchemy import SQLAlchemy
-from flask.ext.heroku import Heroku
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask_heroku import Heroku
 
 
 import time
