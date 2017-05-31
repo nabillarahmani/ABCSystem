@@ -17,9 +17,12 @@ app = Flask(__name__)
 
 env = DotEnv()
 env.init_app(app)
+db = SQLAlchemy()
+db.init_app(app)
 
 heroku = Heroku(app)
 
+app.config.from_object(os.environ['APP_SETTINGS'])
 # POSTGRES = {
 #     'user': 'postgres',
 #     'pw': 'ifweirdnabey!2',
@@ -30,8 +33,7 @@ heroku = Heroku(app)
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
 
-db = SQLAlchemy()
-db.init_app(app)
+
 
 env.eval(keys={
 	'DEBUG': bool,
