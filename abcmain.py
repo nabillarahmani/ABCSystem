@@ -22,7 +22,7 @@ db.init_app(app)
 
 heroku = Heroku(app)
 
-app.config.from_object(os.environ['APP_SETTINGS'])
+
 # POSTGRES = {
 #     'user': 'postgres',
 #     'pw': 'ifweirdnabey!2',
@@ -33,7 +33,7 @@ app.config.from_object(os.environ['APP_SETTINGS'])
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
 
-
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 
 env.eval(keys={
 	'DEBUG': bool,
