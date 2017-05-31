@@ -5,54 +5,63 @@ from flask import request
 from flask import session
 from flask import stream_with_context
 from flask import url_for
-from models import User
 from flask_dotenv import DotEnv
+from flask_sqlalchemy import SQLAlchemy
+from flask.ext.heroku import Heroku
 from flask.ext.sqlalchemy import SQLAlchemy
+
+
 import time
 
+
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/db_cekal'
-db = SQLAlchemy(app)
+
 env = DotEnv()
 env.init_app(app)
+
+heroku = Heroku(app)
+
+# POSTGRES = {
+#     'user': 'postgres',
+#     'pw': 'ifweirdnabey!2',
+#     'db': 'abcsystem',
+#     'host': 'localhost',
+#     'port': '5432',
+# }
+
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
+
+db = SQLAlchemy()
+db.init_app(app)
+
 env.eval(keys={
 	'DEBUG': bool,
 	'TESTING': bool
 })
 
-# Create our database model
-class User(db.Model):
-	__tablename__ = "users"
-	id = db.Column(db.Integer, primary_key=True)
-	identification_number = db.Column(db.String(120), unique=True)
-	status_cekal = db.Column(db.Boolean())
-
-	def __init__(self, identification_number, status_cekal):
-		self.identification_number = identification_number
-		self.status_cekal = status_cekal
-
-	def __repr__(self):i
-		return '< %r>' % self.identification_number
 
 
-
-@app.route("/logging", methods['POST'])
+@app.route("/logging", methods=['POST'])
 def logging():
 	import time
+	import request
 	"""
 		This method will respectively log the data into database
-	"""		
-	# render_template('index.html', title='', current_page='ABC Gate Home')
-
+	"""	
+	try:
+		data = request.get_data()
+		return 'OK', 200
+	except:
+		return 'FAILED', 404
+    
 
 @app.route('/get_cekal/<identification_number>', methods=['GET'])
 def get_cekal(identification_number):
-	import User
-    """
-    	This routing will handle every get request
-    """
-    if 
-
+	"""
+	This routing will handle every get request
+	"""
+	pass
+    
 
 @app.errorhandler(404)
 def page_not_found_error(err):
