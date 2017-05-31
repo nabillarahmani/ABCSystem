@@ -1,4 +1,8 @@
 import os
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'ABCSystem/static'),
+)
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
