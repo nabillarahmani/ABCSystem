@@ -1,10 +1,8 @@
 import os
-
-
-basedir = os.path.abspath(os.path.dirname(__file__))
-STATICFILES_DIRS = (
-    os.path.join(basedir, 'ABCSystem/static'),
-)
+# basedir = os.path.abspath(os.path.dirname(__file__))
+# STATICFILES_DIRS = (
+#     os.path.join(basedir, 'ABCSystem/static'),
+# )
 
 class Config(object):
     DEBUG = False
