@@ -1,6 +1,7 @@
 from abcmain import app, db
-
+from sqlalchemy.sql import func
 import datetime
+import time
 
 
 class BaseModel(db.Model):
@@ -53,4 +54,4 @@ class Loggings(BaseModel, db.Model):
 	photo_taken = db.Column(db.String(4096))
 	status_verification_fingerprint = db.Column(db.Boolean)
 	status_verification_cekal = db.Column(db.Boolean)
-	timestamp_traveller = db.Column()
+	timestamp_traveller = db.Column(db.TIMESTAMP(timezone=False))

@@ -14,14 +14,13 @@ import time
 import os
 
 app = Flask(__name__)
-
-env = DotEnv()
-env.init_app(app)
+app.config.from_object(os.environ['APP_SETTINGS'])
 db = SQLAlchemy()
 db.init_app(app)
-
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 heroku = Heroku(app)
 
+from models import Users, Loggings
 
 # POSTGRES = {
 #     'user': 'postgres',
@@ -32,14 +31,6 @@ heroku = Heroku(app)
 # }
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
-
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
-
-env.eval(keys={
-	'DEBUG': bool,
-	'TESTING': bool
-})
-
 
 
 @app.route("/logging", methods=['POST'])
