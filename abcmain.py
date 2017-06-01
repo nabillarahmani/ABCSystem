@@ -69,9 +69,11 @@ def logging_data():
 
 @app.route('/test_data')
 def get_test_data():
+	"""
+	"""
 	from models import Users
 	from models import Loggings
-
+	app.logger.debug("/test_data accessed")
 	query_user = Users.query.all()
 	query_logging = Loggings.query.all()
 	result = ''
@@ -120,21 +122,57 @@ def empty_table():
 		return 'failed to destroy all data on tables'
 
 
+# def verification_cekal(identification_number):
+# 	import requests
+# 	"""
+# 		This method will send a GET request into the API and retrieve cekal status
+# 	"""
+# 	result = False
+# 	try:
+# 		r = requests.get('http://webservice-abcsystem.herokuapp.com/get_cekal/', params=identification_number)
+# 		print(r.url)
+# 		if r.status_code == 200:
+# 			app.logger.debug('Succeed on getting status cekal')
+# 		else:
+# 			app.logger.debug('There is no data on this user')
+# 		if r.text == 'False':
+# 			result = False
+# 		else:
+# 			result = True
+# 		return result 
+# 	except:
+# 		app.logger.debug('Failed on making request')
+# 		return result	
+
+
+# @app.route('/test')
+# def testing():
+# 	print(verification_cekal('1306381736'))
+# 	return 'nyem'
+
+
 @app.route('/get_cekal/<identification_number>', methods=['GET'])
 def get_cekal(identification_number):
 	from models import Users
 	"""
 	This routing will handle every get request
 	"""
+	app.logger.debug("/get_cekal accessed")
+	app.logger.debug("Get cekal for : {}".format(identification_number))
 	try:
 		user = Users.query.filter_by(identification_number=identification_number).first()
-		print(user)
+		# If there's no users in database, we indicate them as not cekal
 		if user is None:
-			return 'NO USER', 204
+			app.logger.debug('No user in database cekal')
+			return False, 204
+		# If there's a user then return with the data
 		else:
-			return user.status_cekal, 200
-	except:
-		return 'ERROR ON QUERY', 204
+			status_cekal = user.status_cekal
+			app.logger.debug('The user with no : {} is getting status : {}'.format(identification_number, status_cekal))
+			return str(status_cekal), 200
+	except Exception as e:
+		app.logger.debug(str(e))
+		return 'ERROR ON QUERY', 400
 
 
 @app.route('/add_users/', methods=['POST'])
@@ -156,6 +194,11 @@ def add_users():
 	except Exception as e:
 		app.logger.debug("Failed to commit a new user")
 		return "failed to commit a new user"
+
+
+@app.route('/')
+def index():
+	return 'welcome to abc webservice!'
 
 
 @app.errorhandler(404)
@@ -182,37 +225,37 @@ def create_dummy_loggings():
 	ts = time.time()
 	
 	loggings.append(Loggings(identification_number='1306381730', fullname='Andinta Zumar', photo_taken='', 
-							 status_verification_cekal=True, status_verification_fingerprint= True,
+							 status_verification_cekal=False, status_verification_fingerprint= True,
 							 timestamp_traveller=datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')))
 	loggings.append(Loggings(identification_number='1306381731', fullname='Sumanadi Rahmanadhika', photo_taken='', 
-							 status_verification_cekal=True, status_verification_fingerprint= True,
+							 status_verification_cekal=False, status_verification_fingerprint= True,
 							 timestamp_traveller=datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')))
 	loggings.append(Loggings(identification_number='1306381732', fullname='Rizky Noviandi', photo_taken='', 
-							 status_verification_cekal=True, status_verification_fingerprint= True,
+							 status_verification_cekal=False, status_verification_fingerprint= True,
 							 timestamp_traveller=datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')))
 	loggings.append(Loggings(identification_number='1306381733', fullname='Emil Farisan', photo_taken='', 
-							 status_verification_cekal=True, status_verification_fingerprint= True,
+							 status_verification_cekal=False, status_verification_fingerprint= True,
 							 timestamp_traveller=datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')))
 	loggings.append(Loggings(identification_number='1306381734', fullname='Farrah Hunafa', photo_taken='', 
-							 status_verification_cekal=True, status_verification_fingerprint= True,
+							 status_verification_cekal=False, status_verification_fingerprint= True,
 							 timestamp_traveller=datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')))
 	loggings.append(Loggings(identification_number='1306381735', fullname='Tengku Huday', photo_taken='', 
-							 status_verification_cekal=True, status_verification_fingerprint= True,
+							 status_verification_cekal=False, status_verification_fingerprint= True,
 							 timestamp_traveller=datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')))
 	loggings.append(Loggings(identification_number='1306381736', fullname='Nabilla Rahmani Zhafira', photo_taken='', 
-							 status_verification_cekal=True, status_verification_fingerprint= True,
+							 status_verification_cekal=False, status_verification_fingerprint= True,
 							 timestamp_traveller=datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')))
 	loggings.append(Loggings(identification_number='1306381737', fullname='Ayu Saida', photo_taken='', 
-							 status_verification_cekal=True, status_verification_fingerprint= True,
+							 status_verification_cekal=False, status_verification_fingerprint= True,
 							 timestamp_traveller=datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')))
 	loggings.append(Loggings(identification_number='1306381738', fullname='Faridah Nur Suci', photo_taken='', 
-							 status_verification_cekal=True, status_verification_fingerprint= True,
+							 status_verification_cekal=False, status_verification_fingerprint= True,
 							 timestamp_traveller=datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')))
 	loggings.append(Loggings(identification_number='1306381739', fullname='Abidzar Gifari', photo_taken='', 
-							 status_verification_cekal=True, status_verification_fingerprint= True,
+							 status_verification_cekal=False, status_verification_fingerprint= True,
 							 timestamp_traveller=datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')))
 	loggings.append(Loggings(identification_number='1306381740', fullname='Citra Glory', photo_taken='', 
-							 status_verification_cekal=True, status_verification_fingerprint= True,
+							 status_verification_cekal=False, status_verification_fingerprint= True,
 							 timestamp_traveller=datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')))
 	return loggings
 
