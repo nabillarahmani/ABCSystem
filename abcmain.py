@@ -164,7 +164,7 @@ def get_cekal(identification_number):
 		# If there's no users in database, we indicate them as not cekal
 		if user is None:
 			app.logger.debug('No user in database cekal')
-			return False, 204
+			return str(False), 204
 		# If there's a user then return with the data
 		else:
 			status_cekal = user.status_cekal
