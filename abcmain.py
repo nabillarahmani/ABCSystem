@@ -129,8 +129,10 @@ def empty_table():
 # 	"""
 # 	result = False
 # 	try:
-# 		r = requests.get('http://webservice-abcsystem.herokuapp.com/get_cekal/', params=identification_number)
+# 		data = {'identification_number':identification_number}
+# 		r = requests.get('http://webservice-abcsystem.herokuapp.com/get_cekal/', params=data)
 # 		print(r.url)
+# 		print(r.text)
 # 		if r.status_code == 200:
 # 			app.logger.debug('Succeed on getting status cekal')
 # 		else:
@@ -151,12 +153,14 @@ def empty_table():
 # 	return 'nyem'
 
 
-@app.route('/get_cekal/<identification_number>', methods=['GET'])
-def get_cekal(identification_number):
+@app.route('/get_cekal/', methods=['GET'])
+def get_cekal():
 	from models import Users
 	"""
 	This routing will handle every get request
 	"""
+	data = request.args.get('identification_number')
+	identification_number = data
 	app.logger.debug("/get_cekal accessed")
 	app.logger.debug("Get cekal for : {}".format(identification_number))
 	try:
