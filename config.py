@@ -10,8 +10,11 @@ class Config(object):
     DEBUG = False
     TESTING = False
     CSRF_ENABLED = True
+    HOST = '127.0.0.1'
+    PORT = 8080
     SECRET_KEY = 'change-key-should-be-made'
     SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
+    LOG_LEVEL="DEBUG"
 
 
 class ProductionConfig(Config):

@@ -11,5 +11,12 @@ manager = Manager(app)
 manager.add_command('db', MigrateCommand)
 
 
+@manage.command()
+def create_dummy():
+    """Run the linters."""
+    sys.exit(subprocess.call(['flake8']))
+
+
+
 if __name__ == '__main__':
     manager.run()

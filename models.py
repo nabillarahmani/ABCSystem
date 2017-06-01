@@ -1,36 +1,10 @@
-from abcmain import app, db
+from abcmain import db
 from sqlalchemy.sql import func
 import datetime
 import time
 
 
-class BaseModel(db.Model):
-	"""
-	Base data model for all objects
-	"""
-	__abstract__ = True
-
-	def __init__(self, *args):
-	    super().__init__(*args)
-
-	def __repr__(self):
-	    """Define a base way to print models"""
-	    return '%s(%s)' % (self.__class__.__name__, {
-	        column: value
-	        for column, value in self._to_dict().items()
-	    })
-
-	def json(self):
-	    """
-	            Define a base way to jsonify models, dealing with datetime objects
-	    """
-	    return {
-	        column: value if not isinstance(value, datetime.date) else value.strftime('%Y-%m-%d')
-	        for column, value in self._to_dict().items()
-	    }
-
-
-class Users(BaseModel, db.Model):
+class Users(db.Model):
 	"""
 		Model for the users table
 	"""
@@ -41,8 +15,15 @@ class Users(BaseModel, db.Model):
 	identification_number = db.Column(db.String(32))
 	status_cekal = db.Column(db.Boolean)
 
+	def __init__(self, identification_number, status_cekal):
+		self.identification_number = identification_number
+		self.status_cekal = status_cekal
 
-class Loggings(BaseModel, db.Model):
+	def __repr__(self):
+		return '<id {}>'.format(self.id)
+
+
+class Loggings(db.Model):
 	"""
 		Model for the loggings table
 	"""
@@ -55,3 +36,15 @@ class Loggings(BaseModel, db.Model):
 	status_verification_fingerprint = db.Column(db.Boolean)
 	status_verification_cekal = db.Column(db.Boolean)
 	timestamp_traveller = db.Column(db.TIMESTAMP(timezone=False))
+
+	def __init__(self, identification_number, fullname, photo_taken, status_verification_cekal, status_verification_fingerprint, timestamp_traveller):
+		self.identification_number = identification_number
+		self.fullname = fullname
+		self.photo_taken = photo_taken
+		self.status_verification_cekal = status_verification_cekal
+		self.status_verification_fingerprint = status_verification_fingerprint
+		self.timestamp_traveller = timestamp_traveller
+
+
+	def __repr__(self):
+		return '<id {}>'.format(self.id)
