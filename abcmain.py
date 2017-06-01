@@ -76,12 +76,12 @@ def get_test_data():
 	query_logging = Loggings.query.all()
 	result = ''
 	for data in query_user:
-		result += 'identification_number : {}, status_cekal : {}\m'.format(data.identification_number, data.status_cekal)
+		result += 'identification_number : {}, status_cekal : {}\n'.format(data.identification_number, data.status_cekal)
 	result += 'DATA LOGGING : \n'
 	for data in query_logging:
 		result += 'identification_number : {}\n'.format(data.identification_number)
 	return result
-	
+
 
 @app.route('/create_dummy')
 def create_dummy():
@@ -103,6 +103,23 @@ def create_dummy():
 		return 'FAILED THERE IS AN ERROR'
 
 
+@app.route('/empty_all_data')
+def empty_table():
+	from models import Users
+	from models import Loggings
+
+	# Get data for all users and drop the data
+	try:
+		users_row_deleted  = db.session.query(Users).delete()
+		loggings_row_deleted = db.session.query(Loggings).delete()
+		db.session.commit()
+		app.logger.debug('successfully remove all data from tables')
+		return 'users deleted : {}, loggings deleted : {}'.format(users_row_deleted, loggings_row_deleted)
+	except Exception as e:
+		app.logger.debug(str(e))
+		return 'failed to destroy all data on tables'
+
+
 @app.route('/get_cekal/<identification_number>', methods=['GET'])
 def get_cekal(identification_number):
 	from models import Users
@@ -118,6 +135,27 @@ def get_cekal(identification_number):
 			return user.status_cekal, 200
 	except:
 		return 'ERROR ON QUERY', 204
+
+
+@app.route('/add_users/', methods=['POST'])
+def add_users():
+	"""
+	"""
+	from models import Users
+	import ast
+	data = request.data
+	data = ast.literal_eval(data)
+	identification_number = data['identification_number']
+	status_cekal = data['status_cekal']
+	user = Users(identification_number, status_cekal)
+	try:
+		db.session.add(user)
+		db.session.commit()
+		app.logger.debug("Successfully commit a new user into database")
+		return "successfully commit a new user into database"
+	except Exception as e:
+		app.logger.debug("Failed to commit a new user")
+		return "failed to commit a new user"
 
 
 @app.errorhandler(404)
@@ -173,7 +211,7 @@ def create_dummy_loggings():
 	loggings.append(Loggings(identification_number='1306381739', fullname='Abidzar Gifari', photo_taken='', 
 							 status_verification_cekal=True, status_verification_fingerprint= True,
 							 timestamp_traveller=datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')))
-	loggings.append(Loggings(identification_number='1306381730', fullname='Citra Glory', photo_taken='', 
+	loggings.append(Loggings(identification_number='1306381740', fullname='Citra Glory', photo_taken='', 
 							 status_verification_cekal=True, status_verification_fingerprint= True,
 							 timestamp_traveller=datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')))
 	return loggings
