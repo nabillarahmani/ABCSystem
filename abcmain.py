@@ -81,7 +81,7 @@ def get_test_data():
 		result += 'identification_number : {}, status_cekal : {}\n'.format(data.identification_number, data.status_cekal)
 	result += 'DATA LOGGING : \n'
 	for data in query_logging:
-		result += 'identification_number : {}\n'.format(data.identification_number)
+		result += 'identification_number : {} and photo_taken : {}\n'.format(data.identification_number, data.photo_taken)
 	return result
 
 
