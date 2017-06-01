@@ -33,6 +33,7 @@ def logging_data():
 	app.logger.debug('/logging_data route accessed!')
 	# Do parse the request data!
 	data = request.data
+	app.logger.debug(data)
 	data = ast.literal_eval(data)
 	if isinstance(data, dict):
 		identification_number = ''
