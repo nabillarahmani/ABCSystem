@@ -122,35 +122,35 @@ def empty_table():
 		return 'failed to destroy all data on tables'
 
 
-# def verification_cekal(identification_number):
-# 	import requests
-# 	"""
-# 		This method will send a GET request into the API and retrieve cekal status
-# 	"""
-# 	result = False
-# 	try:
-# 		data = {'identification_number':identification_number}
-# 		r = requests.get('http://webservice-abcsystem.herokuapp.com/get_cekal/', params=data)
-# 		print(r.url)
-# 		print(r.text)
-# 		if r.status_code == 200:
-# 			app.logger.debug('Succeed on getting status cekal')
-# 		else:
-# 			app.logger.debug('There is no data on this user')
-# 		if r.text == 'False':
-# 			result = False
-# 		else:
-# 			result = True
-# 		return result 
-# 	except:
-# 		app.logger.debug('Failed on making request')
-# 		return result	
+def verification_cekal(identification_number):
+	import requests
+	"""
+		This method will send a GET request into the API and retrieve cekal status
+	"""
+	result = False
+	try:
+		data = {'identification_number':identification_number}
+		r = requests.get('http://webservice-abcsystem.herokuapp.com/get_cekal/', params=data)
+		print(r.url)
+		print(r.text)
+		if r.status_code == 200:
+			app.logger.debug('Succeed on getting status cekal')
+		else:
+			app.logger.debug('There is no data on this user')
+		if r.text == 'False':
+			result = False
+		else:
+			result = True
+		return result 
+	except:
+		app.logger.debug('Failed on making request')
+		return result	
 
 
-# @app.route('/test')
-# def testing():
-# 	print(verification_cekal('1306381736'))
-# 	return 'nyem'
+@app.route('/test')
+def testing():
+	print(verification_cekal('130641010'))
+	return 'nyem'
 
 
 @app.route('/get_cekal/', methods=['GET'])
@@ -168,7 +168,7 @@ def get_cekal():
 		# If there's no users in database, we indicate them as not cekal
 		if user is None:
 			app.logger.debug('No user in database cekal')
-			return str(False), 204
+			return str(False), 200
 		# If there's a user then return with the data
 		else:
 			status_cekal = user.status_cekal
