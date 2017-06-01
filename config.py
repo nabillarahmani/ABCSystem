@@ -19,6 +19,7 @@ class Config(object):
 
 class ProductionConfig(Config):
     DEBUG = False
+    LOG_LEVEL="DEBUG"
 
 
 class StagingConfig(Config):
