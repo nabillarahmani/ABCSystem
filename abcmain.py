@@ -148,37 +148,37 @@ def verification_cekal(identification_number):
 		return result	
 
 
-@app.route('/test_log_photo', methods=['POST'])
-def test_log_photo():
-	import time
-	import datetime
-	# from io import BytesIO
-	# from PIL import Image
-	"""
-		This method will respectively log the photo into 
-		folder data
-	"""
-	app.logger.debug('Accessing test log photo for a large filter_by')
-	baseurl = './data/'
-	data = request.data
-	try:
-		ts = time.time()
-		ts = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-		filename = ts + ''
-		t = open(baseurl+ts+, "w+")
-		t.write(data)
-		t.close()
-		app.logger.debug('successfully log a test data')
-		return 'successfully log a test data'
-	except Exception as e:
-		app.logger.debug(str(e))
-		return 'Failed test logging'
+# @app.route('/test_log_photo', methods=['POST'])
+# def test_log_photo():
+# 	import time
+# 	import datetime
+# 	# from io import BytesIO
+# 	# from PIL import Image
+# 	"""
+# 		This method will respectively log the photo into 
+# 		folder data
+# 	"""
+# 	app.logger.debug('Accessing test log photo for a large filter_by')
+# 	baseurl = './data/'
+# 	data = request.data
+# 	try:
+# 		ts = time.time()
+# 		ts = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+# 		filename = ts + ''
+# 		t = open(baseurl+ts+, "w+")
+# 		t.write(data)
+# 		t.close()
+# 		app.logger.debug('successfully log a test data')
+# 		return 'successfully log a test data'
+# 	except Exception as e:
+# 		app.logger.debug(str(e))
+# 		return 'Failed test logging'
 
 
-@app.route('/test')
-def testing():
-	print(verification_cekal('130641010'))
-	return 'nyem'
+# @app.route('/test')
+# def testing():
+# 	print(verification_cekal('130641010'))
+# 	return 'nyem'
 
 
 @app.route('/get_cekal/', methods=['GET'])
