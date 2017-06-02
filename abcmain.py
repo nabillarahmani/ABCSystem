@@ -22,6 +22,19 @@ heroku = Heroku(app)
 app.logger.setLevel(app.config['LOG_LEVEL'])
 
 
+@app.route('/test')
+def testing():
+	import time
+	import datetime
+	import requests
+	data_logging = {'identification_number': '13400400493', 'timestamp_traveller': '2017-06-02 13:35:10', 'status_cekal': False, 'full_name': '', 'photo_taken': '', 'fullname': 'PUTRI PARAHITA'}
+	ts = time.time()
+	ts = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+	data_logging['timestamp_traveller'] = ts
+	result = requests.post("http://localhost:8080/logging_data", params=data_logging)	
+	return 'nyem'
+
+
 @app.route("/logging_data", methods=['POST'])
 def logging_data():
 	import time
@@ -33,8 +46,13 @@ def logging_data():
 	app.logger.debug('/logging_data route accessed!')
 	# Do parse the request data!
 	data = request.data
+	data = {}
+	data['identification_number'] = request.args.get('identification_number')
+	data['fullname'] = request.args.get('fullname')
+	data['photo_taken'] = request.args.get('photo_taken')
+	data['status_verification_cekal'] = request.args.get('status_verification_cekal')
+	data['status_verification_fingerprint'] = request.args.get('status_verification_fingerprint')
 	app.logger.debug(data)
-	data = ast.literal_eval(data)
 	if isinstance(data, dict):
 		identification_number = ''
 		fullname = ''
@@ -52,7 +70,7 @@ def logging_data():
 			status_verification_cekal = data['status_verification_cekal']
 		if 'status_verification_fingerprint' in data:	
 			status_verification_fingerprint = data['status_verification_fingerprint']
-		if 'timestamp_traveller' in data:	
+		if 'timestamp_traveller' in data:
 			timestamp_traveller = data['timestamp_traveller']
 		try:
 			query = Loggings(identification_number, fullname, photo_taken, status_verification_cekal, status_verification_fingerprint, timestamp_traveller)
@@ -173,12 +191,6 @@ def verification_cekal(identification_number):
 # 	except Exception as e:
 # 		app.logger.debug(str(e))
 # 		return 'Failed test logging'
-
-
-# @app.route('/test')
-# def testing():
-# 	print(verification_cekal('130641010'))
-# 	return 'nyem'
 
 
 @app.route('/get_cekal/', methods=['GET'])
