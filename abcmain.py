@@ -61,7 +61,7 @@ def logging_data():
 			app.logger.debug('/logging_data succeed!')
 			return 'SUCCEED QUERY', 200
 		except Exception as e:
-			app.logger.debug('/logging_data route failed on query!')
+			app.logger.debug(str(e))
 			return 'ERROR ON QUERY', 204
 	else:
 		app.logger.debug('/logging_data data is not in dictionary!')
@@ -146,6 +146,31 @@ def verification_cekal(identification_number):
 	except:
 		app.logger.debug('Failed on making request')
 		return result	
+
+
+@app.route('/test_log_photo', methods=['POST'])
+def test_log_photo():
+	import time
+	import datetime
+	"""
+		This method will respectively log the photo into 
+		folder data
+	"""
+	app.logger.debug('Accessing test log photo for a large filter_by')
+	baseurl = './data'
+	data = request.data
+	try:
+		ts = time.time()
+		ts = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+		filename = ts + ''
+		t = open(url+ts, "w+")
+		t.write(data)
+		t.close()
+		app.logger.debug('successfully log a test data')
+		return 'successfully log a test data'
+	except Exception as e:
+		app.logger.debug(str(e))
+		return 'Failed test logging'
 
 
 @app.route('/test')
