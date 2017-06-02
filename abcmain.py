@@ -46,12 +46,14 @@ def logging_data():
 	app.logger.debug('/logging_data route accessed!')
 	# Do parse the request data!
 	data = request.data
+	app.logger.debug(data)
 	data = {}
 	data['identification_number'] = request.args.get('identification_number')
 	data['fullname'] = request.args.get('fullname')
 	data['photo_taken'] = request.args.get('photo_taken')
 	data['status_verification_cekal'] = request.args.get('status_verification_cekal')
 	data['status_verification_fingerprint'] = request.args.get('status_verification_fingerprint')
+	data['timestamp_traveller'] = request.args.get('timestamp_traveller')
 	app.logger.debug(data)
 	if isinstance(data, dict):
 		identification_number = ''
@@ -164,33 +166,6 @@ def verification_cekal(identification_number):
 	except:
 		app.logger.debug('Failed on making request')
 		return result	
-
-
-# @app.route('/test_log_photo', methods=['POST'])
-# def test_log_photo():
-# 	import time
-# 	import datetime
-# 	# from io import BytesIO
-# 	# from PIL import Image
-# 	"""
-# 		This method will respectively log the photo into 
-# 		folder data
-# 	"""
-# 	app.logger.debug('Accessing test log photo for a large filter_by')
-# 	baseurl = './data/'
-# 	data = request.data
-# 	try:
-# 		ts = time.time()
-# 		ts = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-# 		filename = ts + ''
-# 		t = open(baseurl+ts+, "w+")
-# 		t.write(data)
-# 		t.close()
-# 		app.logger.debug('successfully log a test data')
-# 		return 'successfully log a test data'
-# 	except Exception as e:
-# 		app.logger.debug(str(e))
-# 		return 'Failed test logging'
 
 
 @app.route('/get_cekal/', methods=['GET'])
