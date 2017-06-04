@@ -43,50 +43,55 @@ def logging_data():
 	"""
 		This method will respectively log the data into database
 	"""	
-	app.logger.debug('/logging_data route accessed!')
-	# Do parse the request data!
-	data = request.data
-	app.logger.debug(data)
-	data = {}
-	data['identification_number'] = request.args.get('identification_number')
-	data['fullname'] = request.args.get('fullname')
-	data['photo_taken'] = request.args.get('photo_taken')
-	data['status_verification_cekal'] = request.args.get('status_verification_cekal')
-	data['status_verification_fingerprint'] = request.args.get('status_verification_fingerprint')
-	data['timestamp_traveller'] = request.args.get('timestamp_traveller')
-	app.logger.debug(data)
-	if isinstance(data, dict):
-		identification_number = ''
-		fullname = ''
-		photo_taken = ''
-		status_verification_cekal = False
-		status_verification_fingerprint = False
-		timestamp_traveller = ''
-		if 'identification_number' in data:	
-			identification_number = data['identification_number']
-		if 'fullname' in data:	
-			fullname = data['fullname']
-		if 'photo_taken' in data:	
-			photo_taken = data['photo_taken']
-		if 'status_verification_cekal' in data:	
-			status_verification_cekal = data['status_verification_cekal']
-		if 'status_verification_fingerprint' in data:	
-			status_verification_fingerprint = data['status_verification_fingerprint']
-		if 'timestamp_traveller' in data:
-			timestamp_traveller = data['timestamp_traveller']
-		try:
-			query = Loggings(identification_number, fullname, photo_taken, status_verification_cekal, status_verification_fingerprint, timestamp_traveller)
-			db.session.add(query)
-			db.session.commit()
-			app.logger.debug('/logging_data succeed!')
-			return 'SUCCEED QUERY', 200
-		except Exception as e:
-			app.logger.debug(str(e))
-			return 'ERROR ON QUERY', 204
-	else:
-		app.logger.debug('/logging_data data is not in dictionary!')
-		return 'DATA MUST BE A DICTIONARY', 400
-
+	try:
+		app.logger.debug('/logging_data route accessed!')
+		# Do parse the request data!
+		data = request.data
+		app.logger.debug(data)
+		data = {}
+		data['identification_number'] = request.args.get('identification_number')
+		data['fullname'] = request.args.get('fullname')
+		data['photo_taken'] = request.args.get('photo_taken')
+		data['status_verification_cekal'] = request.args.get('status_verification_cekal')
+		data['status_verification_fingerprint'] = request.args.get('status_verification_fingerprint')
+		data['timestamp_traveller'] = request.args.get('timestamp_traveller')
+		app.logger.debug(data)
+		if isinstance(data, dict):
+			identification_number = ''
+			fullname = ''
+			photo_taken = ''
+			status_verification_cekal = False
+			status_verification_fingerprint = False
+			timestamp_traveller = ''
+			if 'identification_number' in data:	
+				identification_number = data['identification_number']
+			if 'fullname' in data:	
+				fullname = data['fullname']
+			if 'photo_taken' in data:	
+				photo_taken = data['photo_taken']
+			if 'status_verification_cekal' in data:	
+				status_verification_cekal = data['status_verification_cekal']
+			if 'status_verification_fingerprint' in data:	
+				status_verification_fingerprint = data['status_verification_fingerprint']
+			if 'timestamp_traveller' in data:
+				timestamp_traveller = data['timestamp_traveller']
+			try:
+				query = Loggings(identification_number, fullname, photo_taken, status_verification_cekal, status_verification_fingerprint, timestamp_traveller)
+				db.session.add(query)
+				db.session.commit()
+				app.logger.debug('/logging_data succeed!')
+				return 'SUCCEED QUERY', 200
+			except Exception as e:
+				app.logger.debug(str(e))
+				return 'ERROR ON QUERY', 204
+		else:
+			app.logger.debug('/logging_data data is not in dictionary!')
+			return 'DATA MUST BE A DICTIONARY', 400
+	except:
+		app.logger.debug('There is an error when getting a parameter!')
+		error_msg = 'Parameter should consists of id number, fullname,'\
+					'status cekal, status fingerprint, photo and time'
+		return error_msg, 400
 
 @app.route('/test_data')
 def get_test_data():
@@ -174,25 +179,29 @@ def get_cekal():
 	"""
 	This routing will handle every get request
 	"""
-	data = request.args.get('identification_number')
-	identification_number = data
-	app.logger.debug("/get_cekal accessed")
-	app.logger.debug("Get cekal for : {}".format(identification_number))
 	try:
-		user = Users.query.filter_by(identification_number=identification_number).first()
-		# If there's no users in database, we indicate them as not cekal
-		if user is None:
-			app.logger.debug('No user in database cekal')
-			return str(False), 200
-		# If there's a user then return with the data
-		else:
-			status_cekal = user.status_cekal
-			app.logger.debug('The user with no : {} is getting status : {}'.format(identification_number, status_cekal))
-			return str(status_cekal), 200
-	except Exception as e:
-		app.logger.debug(str(e))
-		return 'ERROR ON QUERY', 400
-
+		data = request.args.get('identification_number')
+		identification_number = data
+		app.logger.debug("/get_cekal accessed")
+		app.logger.debug("Get cekal for : {}".format(identification_number))
+		try:
+			user = Users.query.filter_by(identification_number=identification_number).first()
+			# If there's no users in database, we indicate them as not cekal
+			if user is None:
+				app.logger.debug('No user in database cekal')
+				return str(False), 200
+			# If there's a user then return with the data
+			else:
+				status_cekal = user.status_cekal
+				app.logger.debug('The user with no : {} is getting status : {}'.format(identification_number, status_cekal))
+				return str(status_cekal), 200
+		except Exception as e:
+			app.logger.debug(str(e))
+			return 'ERROR ON QUERY', 400
+	except:
+		app.logger.debug('There is an error on getting parameter')
+		return 'error on getting parameter!', 400
+		
 
 @app.route('/add_users/', methods=['POST'])
 def add_users():
