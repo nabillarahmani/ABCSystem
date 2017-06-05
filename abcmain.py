@@ -76,7 +76,8 @@ def logging_data():
 			if 'timestamp_traveller' in data:
 				timestamp_traveller = data['timestamp_traveller']
 			try:
-				query = Loggings(identification_number, fullname, photo_taken, status_verification_cekal, status_verification_fingerprint, timestamp_traveller)
+				query = Loggings(identification_number, fullname, photo_taken, 
+					status_verification_cekal, status_verification_fingerprint, timestamp_traveller)
 				db.session.add(query)
 				db.session.commit()
 				app.logger.debug('/logging_data succeed!')
@@ -201,7 +202,7 @@ def get_cekal():
 	except:
 		app.logger.debug('There is an error on getting parameter')
 		return 'error on getting parameter!', 400
-		
+
 
 @app.route('/add_users/', methods=['POST'])
 def add_users():
